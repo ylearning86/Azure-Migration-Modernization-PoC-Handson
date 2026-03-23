@@ -235,7 +235,16 @@ module spoke1Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
         routeTableResourceId: deployFirewall ? routeTableSpokes.outputs.resourceId : null
       }
     ]
+    peerings: [
+      {
+        remoteVirtualNetworkResourceId: hubVnet.outputs.resourceId
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: deployVpnGateway
+      }
+    ]
   }
+  dependsOn: [vpnGatewayHub]
 }
 
 module spoke2Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
@@ -253,7 +262,16 @@ module spoke2Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
       }
       { name: 'snet-pep', addressPrefix: '10.21.2.0/24' }
     ]
+    peerings: [
+      {
+        remoteVirtualNetworkResourceId: hubVnet.outputs.resourceId
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: deployVpnGateway
+      }
+    ]
   }
+  dependsOn: [vpnGatewayHub]
 }
 
 module spoke3Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
@@ -271,7 +289,16 @@ module spoke3Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
       }
       { name: 'snet-pep', addressPrefix: '10.22.3.0/24' }
     ]
+    peerings: [
+      {
+        remoteVirtualNetworkResourceId: hubVnet.outputs.resourceId
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: deployVpnGateway
+      }
+    ]
   }
+  dependsOn: [vpnGatewayHub]
 }
 
 module spoke4Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
@@ -290,7 +317,16 @@ module spoke4Vnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
       }
       { name: 'snet-pep', addressPrefix: '10.23.2.0/24' }
     ]
+    peerings: [
+      {
+        remoteVirtualNetworkResourceId: hubVnet.outputs.resourceId
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        useRemoteGateways: deployVpnGateway
+      }
+    ]
   }
+  dependsOn: [vpnGatewayHub]
 }
 
 // ============================================================

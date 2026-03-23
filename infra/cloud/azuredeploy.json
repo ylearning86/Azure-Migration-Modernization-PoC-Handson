@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "3573972973808816897"
+      "templateHash": "4926907691302838925"
     }
   },
   "parameters": {
@@ -8301,6 +8301,16 @@
                 "routeTableResourceId": "[if(parameters('deployFirewall'), reference('routeTableSpokes').outputs.resourceId.value, null())]"
               }
             ]
+          },
+          "peerings": {
+            "value": [
+              {
+                "remoteVirtualNetworkResourceId": "[reference('hubVnet').outputs.resourceId.value]",
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": "[parameters('deployVpnGateway')]"
+              }
+            ]
           }
         },
         "template": {
@@ -9936,8 +9946,10 @@
         }
       },
       "dependsOn": [
+        "hubVnet",
         "rgSpoke1",
-        "routeTableSpokes"
+        "routeTableSpokes",
+        "vpnGatewayHub"
       ]
     },
     "spoke2Vnet": {
@@ -9977,6 +9989,16 @@
                 "addressPrefix": "10.21.2.0/24"
               }
             ]
+          },
+          "peerings": {
+            "value": [
+              {
+                "remoteVirtualNetworkResourceId": "[reference('hubVnet').outputs.resourceId.value]",
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": "[parameters('deployVpnGateway')]"
+              }
+            ]
           }
         },
         "template": {
@@ -11612,8 +11634,10 @@
         }
       },
       "dependsOn": [
+        "hubVnet",
         "rgSpoke2",
-        "routeTableSpokes"
+        "routeTableSpokes",
+        "vpnGatewayHub"
       ]
     },
     "spoke3Vnet": {
@@ -11653,6 +11677,16 @@
                 "addressPrefix": "10.22.3.0/24"
               }
             ]
+          },
+          "peerings": {
+            "value": [
+              {
+                "remoteVirtualNetworkResourceId": "[reference('hubVnet').outputs.resourceId.value]",
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": "[parameters('deployVpnGateway')]"
+              }
+            ]
           }
         },
         "template": {
@@ -13288,8 +13322,10 @@
         }
       },
       "dependsOn": [
+        "hubVnet",
         "rgSpoke3",
-        "routeTableSpokes"
+        "routeTableSpokes",
+        "vpnGatewayHub"
       ]
     },
     "spoke4Vnet": {
@@ -13330,6 +13366,16 @@
                 "addressPrefix": "10.23.2.0/24"
               }
             ]
+          },
+          "peerings": {
+            "value": [
+              {
+                "remoteVirtualNetworkResourceId": "[reference('hubVnet').outputs.resourceId.value]",
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": "[parameters('deployVpnGateway')]"
+              }
+            ]
           }
         },
         "template": {
@@ -14965,8 +15011,10 @@
         }
       },
       "dependsOn": [
+        "hubVnet",
         "rgSpoke4",
-        "routeTableSpokes"
+        "routeTableSpokes",
+        "vpnGatewayHub"
       ]
     },
     "vpnGatewayHub": {
