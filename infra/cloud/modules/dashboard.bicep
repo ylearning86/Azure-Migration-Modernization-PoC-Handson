@@ -227,7 +227,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                   }
                 }
               ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
               settings: {}
             }
           }
@@ -268,7 +268,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                   }
                 }
               ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
               settings: {}
             }
           }
@@ -309,7 +309,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                   }
                 }
               ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
               settings: {}
             }
           }

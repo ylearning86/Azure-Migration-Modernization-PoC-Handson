@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "18322938705491428246"
+      "templateHash": "7075590445461411092"
     }
   },
   "parameters": {
@@ -24618,7 +24618,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.38.33.27573",
-              "templateHash": "14520851193419442104"
+              "templateHash": "17662651889448942898"
             }
           },
           "parameters": {
@@ -24917,7 +24917,7 @@
                               }
                             }
                           ],
-                          "type": "Extension/HubsExtension/PartType/ArgQueryChartPart",
+                          "type": "Extension/HubsExtension/PartType/ArgQueryGridPart",
                           "settings": {}
                         }
                       },
@@ -24962,7 +24962,7 @@
                               }
                             }
                           ],
-                          "type": "Extension/HubsExtension/PartType/ArgQueryChartPart",
+                          "type": "Extension/HubsExtension/PartType/ArgQueryGridPart",
                           "settings": {}
                         }
                       },
@@ -25007,7 +25007,7 @@
                               }
                             }
                           ],
-                          "type": "Extension/HubsExtension/PartType/ArgQueryChartPart",
+                          "type": "Extension/HubsExtension/PartType/ArgQueryGridPart",
                           "settings": {}
                         }
                       }
