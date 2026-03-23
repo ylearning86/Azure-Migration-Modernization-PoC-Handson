@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "10309000947617700969"
+      "templateHash": "3573972973808816897"
     }
   },
   "parameters": {
@@ -123,10 +123,6 @@
               {
                 "name": "GatewaySubnet",
                 "addressPrefix": "10.10.255.0/27"
-              },
-              {
-                "name": "snet-management",
-                "addressPrefix": "10.10.3.0/24"
               }
             ]
           }
