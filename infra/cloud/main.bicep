@@ -3,7 +3,7 @@
 targetScope = 'subscription'
 
 @description('Azure region for all resources')
-param location string
+param location string = deployment().location
 
 @description('Deploy Azure Firewall')
 param deployFirewall bool = true
