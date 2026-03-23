@@ -382,7 +382,7 @@ module vpnGatewayHub 'br/public:avm/res/network/virtual-network-gateway:0.10.1' 
     name: 'vpngw-hub'
     location: location
     gatewayType: 'Vpn'
-    skuName: 'VpnGw1'
+    skuName: 'VpnGw1AZ'
     tags: commonTags
     virtualNetworkResourceId: hubVnet.outputs.resourceId
     clusterSettings: { clusterMode: 'activePassiveNoBgp' }

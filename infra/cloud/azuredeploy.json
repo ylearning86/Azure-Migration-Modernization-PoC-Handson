@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "10203632315820782164"
+      "templateHash": "17407061818150472363"
     }
   },
   "parameters": {
@@ -19267,7 +19267,7 @@
             "value": "Vpn"
           },
           "skuName": {
-            "value": "VpnGw1"
+            "value": "VpnGw1AZ"
           },
           "tags": {
             "value": "[variables('commonTags')]"
