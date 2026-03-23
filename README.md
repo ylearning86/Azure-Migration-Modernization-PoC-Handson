@@ -65,8 +65,8 @@ Nested Hyper-V による疑似オンプレ環境を構築し、4 つの移行パ
  │ │DC01││WEB ││SQL  │  │S2S│ VPN Gateway  │   │   VM + Azure SQL
  │ │    ││ 01 ││ 01  │  ├──►│              │◄──┤
  │ └────┘└────┘└─────┘  │VPN│ Bastion      │   ├── Spoke3 (10.22.0.0/16) Container
- │ ┌───────────────────┐ │   │              │   │   Container Apps + Azure SQL
- │ │Migrate Appliance  │ │   │              │   │
+ │ ┌───────────────────┐ │   │ DNS Resolver  │   │   Container Apps + Azure SQL
+ │ │Migrate Appliance  │ │   │ Private DNS   │   │
  │ └───────────────────┘ │   └──────────────┘   └── Spoke4 (10.23.0.0/16) Full PaaS
  └───────────────────────┘                           App Service + Azure SQL
 ```
@@ -80,8 +80,9 @@ Nested Hyper-V による疑似オンプレ環境を構築し、4 つの移行パ
 | Azure Firewall Basic | ~$300 |
 | VPN Gateway (Hub 側 VpnGw1) | ~$150 |
 | Azure Bastion Basic | ~$140 |
+| DNS Private Resolver | ~$180 |
 | Log Analytics / Policy / Defender | ~$30 |
-| **クラウド基盤合計** | **~$620** |
+| **クラウド基盤合計** | **~$800** |
 
 ### オンプレ環境（Step 2）
 
@@ -101,7 +102,7 @@ Nested Hyper-V による疑似オンプレ環境を構築し、4 つの移行パ
 
 | 状態 | 月額概算 |
 |------|--------|
-| 全常時稼働 | ~$1,050 |
+| 全常時稼働 | ~$1,230 |
 | 利用時のみ起動 | ~$100-150 |
 
 ## 前提条件
