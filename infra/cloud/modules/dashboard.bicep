@@ -173,6 +173,146 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               }
             }
           }
+          // Resource Graph: All PoC resources
+          {
+            position: { x: 0, y: 13, colSpan: 12, rowSpan: 1 }
+            metadata: {
+              inputs: []
+              type: 'Extension/HubsExtension/PartType/MarkdownPart'
+              settings: {
+                content: {
+                  settings: {
+                    content: '## Deployed Resources (Resource Graph - Live)'
+                    title: ''
+                    subtitle: ''
+                    markdownSource: 1
+                  }
+                }
+              }
+            }
+          }
+          {
+            position: { x: 0, y: 14, colSpan: 12, rowSpan: 5 }
+            metadata: {
+              inputs: [
+                {
+                  name: 'partTitle'
+                  value: 'All PoC Resources'
+                }
+                {
+                  name: 'query'
+                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | project Resource=name, Type=type, ResourceGroup=resourceGroup, Location=location, ProvisioningState=properties.provisioningState | sort by ResourceGroup asc, Type asc'
+                }
+                {
+                  name: 'chartType'
+                  value: 0
+                }
+                {
+                  name: 'isShared'
+                  value: false
+                }
+                {
+                  name: 'queryId'
+                  value: ''
+                }
+                {
+                  name: 'formatResults'
+                  value: false
+                }
+                {
+                  name: 'queryScope'
+                  value: {
+                    scope: 0
+                    values: []
+                  }
+                }
+              ]
+              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              settings: {}
+            }
+          }
+          // Resource Graph: Resource count by RG
+          {
+            position: { x: 0, y: 19, colSpan: 6, rowSpan: 4 }
+            metadata: {
+              inputs: [
+                {
+                  name: 'partTitle'
+                  value: 'Resources per Resource Group'
+                }
+                {
+                  name: 'query'
+                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | summarize Count=count() by ResourceGroup=resourceGroup | sort by ResourceGroup asc'
+                }
+                {
+                  name: 'chartType'
+                  value: 1
+                }
+                {
+                  name: 'isShared'
+                  value: false
+                }
+                {
+                  name: 'queryId'
+                  value: ''
+                }
+                {
+                  name: 'formatResults'
+                  value: false
+                }
+                {
+                  name: 'queryScope'
+                  value: {
+                    scope: 0
+                    values: []
+                  }
+                }
+              ]
+              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              settings: {}
+            }
+          }
+          // Resource Graph: Resource count by type
+          {
+            position: { x: 6, y: 19, colSpan: 6, rowSpan: 4 }
+            metadata: {
+              inputs: [
+                {
+                  name: 'partTitle'
+                  value: 'Resources by Type'
+                }
+                {
+                  name: 'query'
+                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | summarize Count=count() by Type=type | sort by Count desc'
+                }
+                {
+                  name: 'chartType'
+                  value: 2
+                }
+                {
+                  name: 'isShared'
+                  value: false
+                }
+                {
+                  name: 'queryId'
+                  value: ''
+                }
+                {
+                  name: 'formatResults'
+                  value: false
+                }
+                {
+                  name: 'queryScope'
+                  value: {
+                    scope: 0
+                    values: []
+                  }
+                }
+              ]
+              type: 'Extension/HubsExtension/PartType/ArgQueryChartPart'
+              settings: {}
+            }
+          }
         ]
       }
     ]
