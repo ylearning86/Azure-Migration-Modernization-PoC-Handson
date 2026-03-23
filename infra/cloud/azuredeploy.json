@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "4926907691302838925"
+      "templateHash": "730095380857958888"
     }
   },
   "parameters": {
@@ -24589,6 +24589,288 @@
           }
         }
       }
+    },
+    "pocDashboard": {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('pocDashboard-{0}', uniqueString('pocDashboard', deployment().name))]",
+      "resourceGroup": "rg-hub",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "subscriptionId": {
+            "value": "[subscription().subscriptionId]"
+          },
+          "tags": {
+            "value": "[variables('commonTags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.38.33.27573",
+              "templateHash": "10137893502601619368"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Azure region for deployment"
+              }
+            },
+            "subscriptionId": {
+              "type": "string",
+              "metadata": {
+                "description": "Subscription ID for portal deep links"
+              }
+            },
+            "tags": {
+              "type": "object",
+              "metadata": {
+                "description": "Common tags"
+              }
+            }
+          },
+          "variables": {
+            "portalBase": "[format('https://portal.azure.com/#@/resource/subscriptions/{0}', parameters('subscriptionId'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Portal/dashboards",
+              "apiVersion": "2020-09-01-preview",
+              "name": "dash-poc-overview",
+              "location": "[parameters('location')]",
+              "tags": "[union(parameters('tags'), createObject('hidden-title', 'PoC Environment Overview'))]",
+              "properties": {
+                "lenses": [
+                  {
+                    "order": 0,
+                    "parts": [
+                      {
+                        "position": {
+                          "x": 0,
+                          "y": 0,
+                          "colSpan": 12,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "# Azure Migration & Modernization PoC\n\n```\nOn-Prem (10.0.0.0/16) ──VPN── Hub (10.10.0.0/16) ──Peering── Spoke1 (10.20.0.0/16) Rehost\n  Hyper-V Host (D8s_v5)         FW / Bastion / VPN GW           Spoke2 (10.21.0.0/16) DB PaaS\n  DC01 / WEB01 / SQL01          Log Analytics                   Spoke3 (10.22.0.0/16) Container\n  Migrate Appliance             Route Table                     Spoke4 (10.23.0.0/16) Full PaaS\n```",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 0,
+                          "y": 3,
+                          "colSpan": 6,
+                          "rowSpan": 4
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "[format('## Hub Resources (rg-hub)\n\n| Resource | Type |\n|----------|------|\n| [afw-hub]({0}/resourceGroups/rg-hub/providers/Microsoft.Network/azureFirewalls/afw-hub/overview) | Firewall Basic |\n| [bas-hub]({1}/resourceGroups/rg-hub/providers/Microsoft.Network/bastionHosts/bas-hub/overview) | Bastion Basic |\n| [vpngw-hub]({2}/resourceGroups/rg-hub/providers/Microsoft.Network/virtualNetworkGateways/vpngw-hub/overview) | VPN GW VpnGw1 |\n| [law-hub]({3}/resourceGroups/rg-hub/providers/Microsoft.OperationalInsights/workspaces/law-hub/overview) | Log Analytics |\n| [rt-spokes-to-fw]({4}/resourceGroups/rg-hub/providers/Microsoft.Network/routeTables/rt-spokes-to-fw/overview) | Route Table |', variables('portalBase'), variables('portalBase'), variables('portalBase'), variables('portalBase'), variables('portalBase'))]",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 6,
+                          "y": 3,
+                          "colSpan": 6,
+                          "rowSpan": 4
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "## Network\n\n### Peering\n| Peering | State |\n|---------|-------|\n| Hub ↔ Spoke1 | Connected |\n| Hub ↔ Spoke2 | Connected |\n| Hub ↔ Spoke3 | Connected |\n| Hub ↔ Spoke4 | Connected |\n\n### Firewall Rules\n| Rule | Src → Dst | Ports |\n|------|----------|-------|\n| OnPrem→Spokes | 10.0/16→10.20-23/16 | Any |\n| Spokes→OnPrem | 10.20-23/16→10.0/16 | Any |\n| DNS Out | 10/8→* | 53 |\n| HTTPS Out | 10/8→* | 443 |\n| HTTP Out | 10/8→* | 80 |",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 0,
+                          "y": 7,
+                          "colSpan": 3,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "[format('## Spoke1: Rehost\n[rg-spoke1]({0}/resourceGroups/rg-spoke1/overview)\n\n- **VNet**: 10.20.0.0/16\n- snet-web / snet-db\n- **Target**: Azure VM x 2\n- **Tool**: Copilot Migration Agent', variables('portalBase'))]",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 3,
+                          "y": 7,
+                          "colSpan": 3,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "[format('## Spoke2: DB PaaS\n[rg-spoke2]({0}/resourceGroups/rg-spoke2/overview)\n\n- **VNet**: 10.21.0.0/16\n- snet-web / snet-pep\n- **Target**: VM + Azure SQL\n- **Tool**: Copilot App Mod + DMS', variables('portalBase'))]",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 6,
+                          "y": 7,
+                          "colSpan": 3,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "[format('## Spoke3: Container\n[rg-spoke3]({0}/resourceGroups/rg-spoke3/overview)\n\n- **VNet**: 10.22.0.0/16\n- snet-aca / snet-pep\n- **Target**: Container Apps + SQL\n- **Tool**: Copilot App Mod + Docker', variables('portalBase'))]",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 9,
+                          "y": 7,
+                          "colSpan": 3,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "[format('## Spoke4: Full PaaS\n[rg-spoke4]({0}/resourceGroups/rg-spoke4/overview)\n\n- **VNet**: 10.23.0.0/16\n- snet-appservice / snet-pep\n- **Target**: App Service + SQL\n- **Tool**: Copilot App Mod', variables('portalBase'))]",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 0,
+                          "y": 10,
+                          "colSpan": 6,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "## Azure Policy\n\n| Policy | Effect |\n|--------|--------|\n| Allowed locations (JE/JW) | Deny |\n| Require Environment tag on RG | Deny |\n| Storage public access | Audit |\n| SQL auditing enabled | Audit |\n| SQL public access | Audit |\n| Management ports closed | Audit |\n| App Service public access | Audit |",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "position": {
+                          "x": 6,
+                          "y": 10,
+                          "colSpan": 6,
+                          "rowSpan": 3
+                        },
+                        "metadata": {
+                          "inputs": [],
+                          "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                          "settings": {
+                            "content": {
+                              "settings": {
+                                "content": "## Route Table (rt-spokes-to-fw)\n\n| Route | Prefix | Next Hop |\n|-------|--------|----------|\n| default-to-firewall | 0.0.0.0/0 | FW Private IP |\n| onprem-to-firewall | 10.0.0.0/16 | FW Private IP |\n\n## Tags (All Resources)\n\n| Tag | Value |\n|-----|-------|\n| Environment | PoC |\n| SecurityControl | ignore |",
+                                "title": "",
+                                "subtitle": "",
+                                "markdownSource": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "outputs": {
+            "dashboardId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Portal/dashboards', 'dash-poc-overview')]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "rgHub"
+      ]
     }
   },
   "outputs": {

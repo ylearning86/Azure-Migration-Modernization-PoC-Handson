@@ -501,6 +501,19 @@ module policyAppServicePublic 'br/public:avm/res/authorization/policy-assignment
 }
 
 // ============================================================
+// Azure Portal Dashboard
+// ============================================================
+
+module pocDashboard './modules/dashboard.bicep' = {
+  scope: rgHub
+  params: {
+    location: location
+    subscriptionId: subscription().subscriptionId
+    tags: commonTags
+  }
+}
+
+// ============================================================
 // Outputs
 // ============================================================
 
