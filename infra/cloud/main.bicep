@@ -128,14 +128,6 @@ module firewallPolicy 'br/public:avm/res/network/firewall-policy:0.3.4' = if (de
                 ipProtocols: ['Any']
                 destinationPorts: ['*']
               }
-              {
-                ruleType: 'NetworkRule'
-                name: 'Spoke-to-Spoke'
-                sourceAddresses: ['10.20.0.0/16', '10.21.0.0/16', '10.22.0.0/16', '10.23.0.0/16']
-                destinationAddresses: ['10.20.0.0/16', '10.21.0.0/16', '10.22.0.0/16', '10.23.0.0/16']
-                ipProtocols: ['Any']
-                destinationPorts: ['*']
-              }
             ]
           }
         ]
