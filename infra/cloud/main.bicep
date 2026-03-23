@@ -70,6 +70,8 @@ module hubVnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
       { name: 'AzureFirewallManagementSubnet', addressPrefix: '10.10.4.0/26' }
       { name: 'AzureBastionSubnet', addressPrefix: '10.10.2.0/26' }
       { name: 'GatewaySubnet', addressPrefix: '10.10.255.0/27' }
+      { name: 'snet-dns-inbound', addressPrefix: '10.10.5.0/28' }
+      { name: 'snet-dns-outbound', addressPrefix: '10.10.5.16/28' }
     ]
   }
 }
@@ -85,6 +87,47 @@ module logAnalytics 'br/public:avm/res/operational-insights/workspace:0.15.0' = 
     location: location
     dataRetention: 30
     tags: commonTags
+  }
+}
+
+// ============================================================
+// DNS Private Resolver + Private DNS Zones
+// ============================================================
+
+module dnsResolver 'br/public:avm/res/network/dns-resolver:0.5.6' = {
+  scope: rgHub
+  params: {
+    name: 'dnspr-hub'
+    location: location
+    tags: commonTags
+    virtualNetworkResourceId: hubVnet.outputs.resourceId
+    inboundEndpoints: [
+      {
+        name: 'inbound'
+        subnetResourceId: '${hubVnet.outputs.resourceId}/subnets/snet-dns-inbound'
+      }
+    ]
+    outboundEndpoints: [
+      {
+        name: 'outbound'
+        subnetResourceId: '${hubVnet.outputs.resourceId}/subnets/snet-dns-outbound'
+      }
+    ]
+  }
+}
+
+// Private DNS Zone for Azure SQL (used by Spoke2/3/4 Private Endpoints)
+module privateDnsZoneSql 'br/public:avm/res/network/private-dns-zone:0.8.1' = {
+  scope: rgHub
+  params: {
+    name: 'privatelink.database.windows.net'
+    tags: commonTags
+    virtualNetworkLinks: [
+      { virtualNetworkResourceId: hubVnet.outputs.resourceId, registrationEnabled: false }
+      { virtualNetworkResourceId: spoke2Vnet.outputs.resourceId, registrationEnabled: false }
+      { virtualNetworkResourceId: spoke3Vnet.outputs.resourceId, registrationEnabled: false }
+      { virtualNetworkResourceId: spoke4Vnet.outputs.resourceId, registrationEnabled: false }
+    ]
   }
 }
 
