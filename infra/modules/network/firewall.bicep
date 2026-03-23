@@ -18,6 +18,18 @@ resource pip 'Microsoft.Network/publicIPAddresses@2024-01-01' = {
   }
 }
 
+resource pipMgmt 'Microsoft.Network/publicIPAddresses@2024-01-01' = {
+  name: 'pip-afw-hub-mgmt'
+  location: location
+  tags: tags
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2024-01-01' = {
   name: 'afwp-hub'
   location: location
@@ -147,6 +159,17 @@ resource firewall 'Microsoft.Network/azureFirewalls@2024-01-01' = {
         }
       }
     ]
+    managementIpConfiguration: {
+      name: 'fw-mgmt-ipconfig'
+      properties: {
+        publicIPAddress: {
+          id: pipMgmt.id
+        }
+        subnet: {
+          id: resourceId('Microsoft.Network/virtualNetworks/subnets', hubVnetName, 'AzureFirewallManagementSubnet')
+        }
+      }
+    }
   }
   dependsOn: [networkRuleCollection, appRuleCollection]
 }

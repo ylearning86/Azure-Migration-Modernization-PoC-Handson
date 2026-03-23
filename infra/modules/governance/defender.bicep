@@ -4,16 +4,8 @@
 
 targetScope = 'subscription'
 
+#disable-next-line no-unused-params
 param logAnalyticsWorkspaceId string
-
-// Log Analytics ワークスペース連携
-resource workspaceSetting 'Microsoft.Security/workspaceSettings@2017-08-01-preview' = {
-  name: 'default'
-  properties: {
-    workspaceId: logAnalyticsWorkspaceId
-    scope: subscription().id
-  }
-}
 
 // Defender for Servers P1
 resource defenderServers 'Microsoft.Security/pricings@2024-01-01' = {
