@@ -175,142 +175,20 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
           }
           // Resource Graph: All PoC resources
           {
-            position: { x: 0, y: 13, colSpan: 12, rowSpan: 1 }
+            position: { x: 0, y: 13, colSpan: 12, rowSpan: 4 }
             metadata: {
               inputs: []
               type: 'Extension/HubsExtension/PartType/MarkdownPart'
               settings: {
                 content: {
                   settings: {
-                    content: '## Deployed Resources (Resource Graph - Live)'
+                    content: '## Deployed Resources\n\nClick the links below to view live resource data in Resource Graph Explorer:\n\n- [All PoC Resources (Table)](https://portal.azure.com/#blade/HubsExtension/ArgQueryBlade/query/resources%20%7C%20where%20resourceGroup%20in~%20(%22rg-hub%22%2C%22rg-spoke1%22%2C%22rg-spoke2%22%2C%22rg-spoke3%22%2C%22rg-spoke4%22%2C%22rg-onprem%22)%20%7C%20project%20Name%3Dname%2C%20Type%3Dtype%2C%20RG%3DresourceGroup%2C%20Location%3Dlocation)\n- [Resource Count by RG](https://portal.azure.com/#blade/HubsExtension/ArgQueryBlade/query/resources%20%7C%20where%20resourceGroup%20in~%20(%22rg-hub%22%2C%22rg-spoke1%22%2C%22rg-spoke2%22%2C%22rg-spoke3%22%2C%22rg-spoke4%22%2C%22rg-onprem%22)%20%7C%20summarize%20Count%3Dcount()%20by%20RG%3DresourceGroup)\n- [Resource Count by Type](https://portal.azure.com/#blade/HubsExtension/ArgQueryBlade/query/resources%20%7C%20where%20resourceGroup%20in~%20(%22rg-hub%22%2C%22rg-spoke1%22%2C%22rg-spoke2%22%2C%22rg-spoke3%22%2C%22rg-spoke4%22%2C%22rg-onprem%22)%20%7C%20summarize%20Count%3Dcount()%20by%20Type%3Dtype)'
                     title: ''
                     subtitle: ''
                     markdownSource: 1
                   }
                 }
               }
-            }
-          }
-          {
-            position: { x: 0, y: 14, colSpan: 12, rowSpan: 5 }
-            metadata: {
-              inputs: [
-                {
-                  name: 'partTitle'
-                  value: 'All PoC Resources'
-                }
-                {
-                  name: 'query'
-                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | project Resource=name, Type=type, ResourceGroup=resourceGroup, Location=location, ProvisioningState=properties.provisioningState | sort by ResourceGroup asc, Type asc'
-                }
-                {
-                  name: 'chartType'
-                  value: 0
-                }
-                {
-                  name: 'isShared'
-                  value: false
-                }
-                {
-                  name: 'queryId'
-                  value: ''
-                }
-                {
-                  name: 'formatResults'
-                  value: false
-                }
-                {
-                  name: 'queryScope'
-                  value: {
-                    scope: 0
-                    values: []
-                  }
-                }
-              ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
-              settings: {}
-            }
-          }
-          // Resource Graph: Resource count by RG
-          {
-            position: { x: 0, y: 19, colSpan: 6, rowSpan: 4 }
-            metadata: {
-              inputs: [
-                {
-                  name: 'partTitle'
-                  value: 'Resources per Resource Group'
-                }
-                {
-                  name: 'query'
-                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | summarize Count=count() by ResourceGroup=resourceGroup | sort by ResourceGroup asc'
-                }
-                {
-                  name: 'chartType'
-                  value: 1
-                }
-                {
-                  name: 'isShared'
-                  value: false
-                }
-                {
-                  name: 'queryId'
-                  value: ''
-                }
-                {
-                  name: 'formatResults'
-                  value: false
-                }
-                {
-                  name: 'queryScope'
-                  value: {
-                    scope: 0
-                    values: []
-                  }
-                }
-              ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
-              settings: {}
-            }
-          }
-          // Resource Graph: Resource count by type
-          {
-            position: { x: 6, y: 19, colSpan: 6, rowSpan: 4 }
-            metadata: {
-              inputs: [
-                {
-                  name: 'partTitle'
-                  value: 'Resources by Type'
-                }
-                {
-                  name: 'query'
-                  value: 'resources | where resourceGroup in~ ("rg-hub","rg-spoke1","rg-spoke2","rg-spoke3","rg-spoke4","rg-onprem") | summarize Count=count() by Type=type | sort by Count desc'
-                }
-                {
-                  name: 'chartType'
-                  value: 2
-                }
-                {
-                  name: 'isShared'
-                  value: false
-                }
-                {
-                  name: 'queryId'
-                  value: ''
-                }
-                {
-                  name: 'formatResults'
-                  value: false
-                }
-                {
-                  name: 'queryScope'
-                  value: {
-                    scope: 0
-                    values: []
-                  }
-                }
-              ]
-              type: 'Extension/HubsExtension/PartType/ArgQueryGridPart'
-              settings: {}
             }
           }
         ]
