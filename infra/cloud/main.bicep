@@ -128,6 +128,38 @@ module firewallPolicy 'br/public:avm/res/network/firewall-policy:0.3.4' = if (de
                 ipProtocols: ['Any']
                 destinationPorts: ['*']
               }
+              {
+                ruleType: 'NetworkRule'
+                name: 'AllowDnsOutbound'
+                sourceAddresses: ['10.0.0.0/8']
+                destinationAddresses: ['*']
+                ipProtocols: ['UDP', 'TCP']
+                destinationPorts: ['53']
+              }
+            ]
+          }
+          {
+            ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+            name: 'AllowInternetOutbound'
+            priority: 200
+            action: { type: 'Allow' }
+            rules: [
+              {
+                ruleType: 'NetworkRule'
+                name: 'AllowHttpsOutbound'
+                sourceAddresses: ['10.0.0.0/8']
+                destinationAddresses: ['*']
+                ipProtocols: ['TCP']
+                destinationPorts: ['443']
+              }
+              {
+                ruleType: 'NetworkRule'
+                name: 'AllowHttpOutbound'
+                sourceAddresses: ['10.0.0.0/8']
+                destinationAddresses: ['*']
+                ipProtocols: ['TCP']
+                destinationPorts: ['80']
+              }
             ]
           }
         ]
