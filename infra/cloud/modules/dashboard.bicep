@@ -62,7 +62,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               settings: {
                 content: {
                   settings: {
-                    content: '## Network\n\n### Peering\n| Peering | State |\n|---------|-------|\n| Hub ↔ Spoke1 | Connected |\n| Hub ↔ Spoke2 | Connected |\n| Hub ↔ Spoke3 | Connected |\n| Hub ↔ Spoke4 | Connected |\n\n### Firewall Rules\n| Rule | Src → Dst | Ports |\n|------|----------|-------|\n| OnPrem→Spokes | 10.0/16→10.20-23/16 | Any |\n| Spokes→OnPrem | 10.20-23/16→10.0/16 | Any |\n| DNS Out | 10/8→* | 53 |\n| HTTPS Out | 10/8→* | 443 |\n| HTTP Out | 10/8→* | 80 |'
+                    content: '## Network\n\n### Peering\n| Peering | State |\n|---------|-------|\n| Hub ↔ Spoke1 | Connected |\n| Hub ↔ Spoke2 | Connected |\n| Hub ↔ Spoke3 | Connected |\n| Hub ↔ Spoke4 | Connected |\n\n### Firewall Rules\n| Rule | Src → Dst | Ports |\n|------|----------|-------|\n| OnPrem→Spokes | 10.0.0.0/16 → 10.20-23.0.0/16 | Any |\n| Spokes→OnPrem | 10.20-23.0.0/16 → 10.0.0.0/16 | Any |\n| DNS Out | 10.0.0.0/8 → * | 53 |\n| HTTPS Out | 10.0.0.0/8 → * | 443 |\n| HTTP Out | 10.0.0.0/8 → * | 80 |'
                     title: ''
                     subtitle: ''
                     markdownSource: 1
