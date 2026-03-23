@@ -38,7 +38,6 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2024-01-01' = {
     sku: {
       tier: 'Basic'
     }
-    threatIntelMode: 'Alert'
   }
 }
 

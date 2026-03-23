@@ -82,13 +82,8 @@ resource dc01Setup 'Microsoft.Compute/virtualMachines/extensions@2024-07-01' = {
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
-      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File setup-dc01.ps1'
-    }
     protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ylearning86/Azure-Migration-Modernization-PoC-Handson/main/infra/scripts/setup-dc01.ps1'
-      ]
+      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -Command "Install-WindowsFeature -Name AD-Domain-Services,DNS -IncludeManagementTools; $pw = ConvertTo-SecureString \'P@ssw0rd1234!\' -AsPlainText -Force; Install-ADDSForest -DomainName contoso.local -DomainNetBIOSName CONTOSO -SafeModeAdministratorPassword $pw -InstallDns -NoRebootOnCompletion:$false -Force"'
     }
   }
 }
@@ -164,13 +159,8 @@ resource app01Setup 'Microsoft.Compute/virtualMachines/extensions@2024-07-01' = 
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
-      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File setup-app01.ps1'
-    }
     protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ylearning86/Azure-Migration-Modernization-PoC-Handson/main/infra/scripts/setup-app01.ps1'
-      ]
+      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -Command "Install-WindowsFeature -Name Web-Server,Web-Asp-Net45,Web-Mgmt-Tools -IncludeManagementTools; Import-Module WebAdministration; Stop-Website -Name \'Default Web Site\' -ErrorAction SilentlyContinue; Set-ItemProperty -Path \'IIS:\\AppPools\\DefaultAppPool\' -Name managedRuntimeVersion -Value v4.0; Set-DnsClientServerAddress -InterfaceAlias \'Ethernet*\' -ServerAddresses 10.0.1.10 -ErrorAction SilentlyContinue"'
     }
   }
 }
@@ -278,13 +268,8 @@ resource db01Setup 'Microsoft.Compute/virtualMachines/extensions@2024-07-01' = {
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
-      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File setup-db01.ps1'
-    }
     protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ylearning86/Azure-Migration-Modernization-PoC-Handson/main/infra/scripts/setup-db01.ps1'
-      ]
+      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -Command "Set-DnsClientServerAddress -InterfaceAlias \'Ethernet*\' -ServerAddresses 10.0.1.10 -ErrorAction SilentlyContinue; \$regPath = \'HKLM:\\SOFTWARE\\Microsoft\\Microsoft SQL Server\\MSSQL15.MSSQLSERVER\\MSSQLServer\'; if (Test-Path \$regPath) { Set-ItemProperty -Path \$regPath -Name LoginMode -Value 2; Restart-Service MSSQLSERVER -Force; Start-Sleep 10 }; New-Item -Path C:\\temp -ItemType Directory -Force; Set-Content -Path C:\\temp\\create-db.sql -Value \'IF DB_ID(N\'\'InventoryDB\'\') IS NULL CREATE DATABASE InventoryDB\'; sqlcmd -S localhost -i C:\\temp\\create-db.sql; Set-Content -Path C:\\temp\\create-table.sql -Value \'USE InventoryDB; IF NOT EXISTS (SELECT * FROM sys.tables WHERE name=N\'\'Products\'\') CREATE TABLE Products(Id INT IDENTITY PRIMARY KEY,Name NVARCHAR(200) NOT NULL,Description NVARCHAR(1000),Price DECIMAL(18,2) NOT NULL,Quantity INT NOT NULL DEFAULT 0,Category NVARCHAR(100),CreatedAt DATETIME2 DEFAULT GETUTCDATE(),UpdatedAt DATETIME2 DEFAULT GETUTCDATE())\'; sqlcmd -S localhost -i C:\\temp\\create-table.sql"'
     }
   }
   dependsOn: [sqlVmDb01]

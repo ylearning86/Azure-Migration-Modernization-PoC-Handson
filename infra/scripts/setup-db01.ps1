@@ -59,9 +59,11 @@ END
 GO
 "@
 
+# 一時ディレクトリ作成
+New-Item -Path 'C:\temp' -ItemType Directory -Force -ErrorAction SilentlyContinue
+
 # sqlcmd で SQL スクリプトを実行
 $sqlScript | Out-File -FilePath 'C:\temp\init-db.sql' -Encoding utf8
-New-Item -Path 'C:\temp' -ItemType Directory -Force -ErrorAction SilentlyContinue
 
 # Mixed Mode 認証を有効化（PoC 用）
 $regPath = 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQLServer'
