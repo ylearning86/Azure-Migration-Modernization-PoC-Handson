@@ -6,13 +6,13 @@
 
 Hub VNet（Firewall / VPN GW / Bastion / 管理サービス）+ Spoke VNet x 4 をデプロイします。
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fylearning86%2FAzure-Migration-Modernization-PoC-Handson%2Fmain%2Finfra%2Fcloud%2Fazuredeploy.json)
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fylearning86%2FAzure-Migration-Modernization-PoC-Handson%2Fmain%2Finfra%2Fcloud%2Fazuredeploy.json" target="_blank"><img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure" /></a>
 
 ### Step 2: 移行元オンプレ環境（Nested Hyper-V）
 
 疑似オンプレ環境（Hyper-V ホスト VM + Nested VM）をデプロイし、VPN で Hub に接続します。
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/TODO_ONPREM)
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/TODO_ONPREM" target="_blank"><img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure" /></a>
 
 > **デプロイ順序**: 必ず Step 1（クラウド） → Step 2（オンプレ）の順でデプロイしてください。
 > Step 2 は Hub VNet の VPN Gateway に接続するため、Step 1 の完了が前提です。
