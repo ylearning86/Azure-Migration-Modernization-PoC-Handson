@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "16859630902800854303"
+      "templateHash": "16559196219738371442"
     }
   },
   "parameters": {
@@ -111,6 +111,10 @@
               {
                 "name": "AzureFirewallSubnet",
                 "addressPrefix": "10.10.1.0/26"
+              },
+              {
+                "name": "AzureFirewallManagementSubnet",
+                "addressPrefix": "10.10.4.0/26"
               },
               {
                 "name": "AzureBastionSubnet",

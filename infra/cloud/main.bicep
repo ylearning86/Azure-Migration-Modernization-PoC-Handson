@@ -67,6 +67,7 @@ module hubVnet 'br/public:avm/res/network/virtual-network:0.7.2' = {
     tags: commonTags
     subnets: [
       { name: 'AzureFirewallSubnet', addressPrefix: '10.10.1.0/26' }
+      { name: 'AzureFirewallManagementSubnet', addressPrefix: '10.10.4.0/26' }
       { name: 'AzureBastionSubnet', addressPrefix: '10.10.2.0/26' }
       { name: 'GatewaySubnet', addressPrefix: '10.10.255.0/27' }
       { name: 'snet-management', addressPrefix: '10.10.3.0/24' }
