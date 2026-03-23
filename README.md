@@ -1,6 +1,21 @@
 # Azure Migration & Modernization PoC ハンズオン
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/TODO)
+## 環境デプロイ
+
+### Step 1: 移行先クラウド環境（Hub & Spoke）
+
+Hub VNet（Firewall / VPN GW / Bastion / 管理サービス）+ Spoke VNet x 4 をデプロイします。
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/TODO_CLOUD)
+
+### Step 2: 移行元オンプレ環境（Nested Hyper-V）
+
+疑似オンプレ環境（Hyper-V ホスト VM + Nested VM）をデプロイし、VPN で Hub に接続します。
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/TODO_ONPREM)
+
+> **デプロイ順序**: 必ず Step 1（クラウド） → Step 2（オンプレ）の順でデプロイしてください。
+> Step 2 は Hub VNet の VPN Gateway に接続するため、Step 1 の完了が前提です。
 
 ## 概要
 
@@ -58,13 +73,36 @@ Nested Hyper-V による疑似オンプレ環境を構築し、4 つの移行パ
 
 ## コスト
 
-| 状態 | 月額概算 |
-|------|---------|
-| 基盤のみ常時稼働 | ~$1,050/月 |
-| 利用時のみ起動 | ~$100-150/月 |
-| Spoke 全部追加時 | +~$174/月 |
+### クラウド環境（Step 1）
 
-> Firewall / VPN GW / Bastion / VM はパラメータまたはスクリプトで ON/OFF 可能
+| サービス | 月額概算 |
+|---------|--------|
+| Azure Firewall Basic | ~$300 |
+| VPN Gateway (Hub 側 VpnGw1) | ~$150 |
+| Azure Bastion Basic | ~$140 |
+| Log Analytics / Policy / Defender | ~$30 |
+| **クラウド基盤合計** | **~$620** |
+
+### オンプレ環境（Step 2）
+
+| サービス | 月額概算 |
+|---------|--------|
+| Hyper-V ホスト VM (D8s_v5) | ~$280 |
+| VPN Gateway (On-Prem 側 VpnGw1) | ~$150 |
+| **オンプレ基盤合計** | **~$430** |
+
+### Spoke リソース（ハンズオン時に追加）
+
+| Spoke | 月額概算 |
+|-------|--------|
+| Spoke 全部合計 | +~$174 |
+
+### コスト最適化
+
+| 状態 | 月額概算 |
+|------|--------|
+| 全常時稼働 | ~$1,050 |
+| 利用時のみ起動 | ~$100-150 |
 
 ## 前提条件
 
@@ -73,7 +111,7 @@ Nested Hyper-V による疑似オンプレ環境を構築し、4 つの移行パ
 
 ## クイックスタート
 
-1. 上部の「Deploy to Azure」ボタンをクリック
-2. パラメータを入力（リージョン、管理者パスワード等）
-3. デプロイ完了まで約 60-90 分待機
+1. **Step 1** の「Deploy to Azure」ボタンをクリックし、クラウド環境をデプロイ（約 30-45 分）
+2. Step 1 の完了を確認後、**Step 2** の「Deploy to Azure」ボタンをクリックし、オンプレ環境をデプロイ（約 30-45 分）
+3. 全環境が利用可能になるまで約 60-90 分待機
 4. [Phase 1](docs/handson/01-explore-onprem.md) から順にハンズオンを開始
