@@ -15,13 +15,33 @@ Azure Migrate を使用して疑似オンプレ環境をアセスメントし、
 
 Azure Portal → **Azure Migrate** → `migr-project` を開きます。
 
-### 2. Azure Migrate アプライアンスのセットアップ
+![Azure Migrate プロジェクト概要](images/04-migrate-overview.png)
+
+### 2. サーバーインベントリの CSV インポート
 
 > **注**: 本ハンズオンでは Azure VM を疑似オンプレとして使用しているため、
-> エージェントベースの検出を行います。
+> CSV インポートによるサーバー検出を行います。
 
-1. Azure Portal → Azure Migrate → **Discover** → **Using agents**
-2. 検出対象として DC01, APP01, DB01 を登録
+1. Azure Migrate → **検出の開始** → ファイルの種類で **サーバー インベントリ (CSV)** を選択
+
+   ![検出画面](images/04-migrate-discovery.png)
+
+2. **ダウンロード** から CSV テンプレートを取得し、サーバー情報を記入（`server-inventory.csv`）
+3. **参照** から `server-inventory.csv` を選択し、**インポート** をクリック
+
+   ![CSV ファイル選択](images/04-migrate-import-check2.png)
+
+4. インポートの進行を確認
+
+   ![インポート進行中](images/04-migrate-import-progress.png)
+
+5. インポート完了後、ページを更新して結果を確認
+
+   ![インポート結果確認](images/04-migrate-import-result.png)
+
+6. インベントリにサーバーが登録されたことを確認
+
+   ![インポート完了](images/04-migrate-import-final.png)
 
 ### 3. Azure Copilot 移行エージェントの活用
 
