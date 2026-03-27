@@ -34,7 +34,7 @@ scale: {
       name: 'queue-scaling'
       azureQueue: {
         queueName: 'orders'
-        queueLength: 10
+        queueLength: '10'
         auth: [
           {
             secretRef: 'storage-connection'

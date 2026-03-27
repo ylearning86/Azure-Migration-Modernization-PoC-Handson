@@ -56,7 +56,7 @@ az containerapp update --name APP -g RG --min-replicas 1
 **Check:**
 ```bash
 # View health probe config
-az containerapp show --name APP -g RG --query "properties.configuration.ingress"
+az containerapp show --name APP -g RG --query "properties.template.containers[0].probes"
 
 # Check if /health endpoint responds
 curl https://APP.REGION.azurecontainerapps.io/health
