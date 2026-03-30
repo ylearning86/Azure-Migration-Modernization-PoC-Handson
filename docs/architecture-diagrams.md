@@ -7,12 +7,10 @@ graph TB
     subgraph Azure["☁️ Azure Subscription"]
 
         subgraph OnPrem["On-Prem VNet<br/>10.0.0.0/16"]
-            subgraph HyperVHost["vm-yourhost (D8s_v5)<br/>Windows Server 2022 / Hyper-V"]
-                DC01["🖥️ DC01<br/>AD DS / DNS<br/>192.168.100.10"]
-                WEB01["🌐 WEB01<br/>IIS / .NET 4.8<br/>192.168.100.11"]
-                SQL01["🗄️ SQL01<br/>SQL Server 2019<br/>192.168.100.12"]
-                MA01["🔍 YOURMA01<br/>Migrate Appliance<br/>192.168.100.13"]
-            end
+            DC01["🖥️ DC01<br/>AD DS / DNS<br/>10.0.1.10"]
+            WEB01["🌐 WEB01<br/>IIS / .NET 4.8<br/>10.0.1.11"]
+            SQL01["🗄️ SQL01<br/>SQL Server 2019<br/>10.0.1.12"]
+            MA01["🔍 YOURMA01<br/>Migrate Appliance<br/>10.0.1.13"]
             VPNGW_OP["VPN Gateway<br/>VpnGw1"]
         end
 
@@ -64,8 +62,8 @@ graph TB
     FW <-->|"Peering"| Spoke3
     FW <-->|"Peering"| Spoke4
 
-    %% Bastion 接続
-    BASTION -.->|"RDP"| HyperVHost
+    %% Bastion 接続（例: On-Prem の WEB01 に RDP）
+    BASTION -.->|"RDP"| WEB01
 
     %% Private Endpoint 接続
     S2_WEB --> S2_PE --> S2_SQL
@@ -78,9 +76,8 @@ graph TB
     WEB01 -.->|"Arc Agent"| ARC
     SQL01 -.->|"Arc Agent"| ARC
 
-    %% Migrate 接続
-    MA01 -.->|"WinRM"| HyperVHost
-    MA01 -.->|"検出データ"| MIGRATE
+    %% Migrate 接続（アプライアンス→Migrate）
+    MA01 -.->|"検出/評価データ"| MIGRATE
 
     %% スタイル
     classDef onprem fill:#f9e2d2,stroke:#e07020,stroke-width:2px
@@ -91,7 +88,7 @@ graph TB
     classDef spoke4 fill:#f5d5d5,stroke:#c03030,stroke-width:2px
     classDef mgmt fill:#e0e0e0,stroke:#606060,stroke-width:1px
 
-    class OnPrem,HyperVHost,DC01,WEB01,SQL01,MA01,VPNGW_OP onprem
+    class OnPrem,DC01,WEB01,SQL01,MA01,VPNGW_OP onprem
     class Hub,FW,VPNGW_HUB,BASTION hub
     class Spoke1,S1_WEB,S1_SQL spoke1
     class Spoke2,S2_WEB,S2_SQL,S2_PE spoke2
@@ -104,9 +101,10 @@ graph TB
 
 ```mermaid
 flowchart LR
-    subgraph Source["疑似オンプレ (Nested Hyper-V)"]
+    subgraph Source["疑似オンプレ (複数 VM)"]
         WEB01["🌐 WEB01<br/>IIS + ASP.NET MVC 5<br/>.NET Framework 4.8"]
         SQL01["🗄️ SQL01<br/>SQL Server 2019"]
+        MA01["🔍 YOURMA01<br/>Migrate Appliance"]
     end
 
     subgraph Tools["移行・モダナイズツール"]
@@ -161,7 +159,7 @@ flowchart LR
 flowchart TD
     P0["Phase 0<br/>🚀 Deploy to Azure<br/>全環境構築 (60-90分)"]
     P1["Phase 1<br/>🔍 現状確認<br/>疑似オンプレ環境の動作確認"]
-    P2["Phase 2<br/>🔗 Arc 接続<br/>Nested VM → Azure Arc 登録"]
+    P2["Phase 2<br/>🔗 Arc 接続<br/>On-Prem VM → Azure Arc 登録"]
     P3["Phase 3<br/>🛡️ ハイブリッド管理<br/>Policy / Monitor / Defender / Update Mgr"]
     P4["Phase 4<br/>📋 移行アセスメント<br/>Azure Migrate Appliance で検出・評価"]
 
@@ -192,55 +190,4 @@ flowchart TD
     style P5C fill:#fff3cd,stroke:#c09020,stroke-width:2px
     style P5D fill:#f5d5d5,stroke:#c03030,stroke-width:2px
     style P6 fill:#1a1a2e,color:#fff,stroke:#e94560
-```
-
-## Nested Hyper-V 内部構成図
-
-```mermaid
-graph TB
-    subgraph AzureVM["Azure VM: vm-yourhost<br/>Standard_D8s_v5 (8vCPU / 32GB RAM)<br/>Windows Server 2022 + Hyper-V"]
-        subgraph HostOS["ホスト OS (8GB RAM)"]
-            NAT["NAT (192.168.100.1)"]
-            AzureNIC["Azure NIC<br/>10.0.1.4"]
-        end
-
-        subgraph vSwitch["Hyper-V Internal vSwitch<br/>192.168.100.0/24"]
-            subgraph DC["DC01 (4GB RAM)"]
-                AD["Active Directory<br/>contoso.local"]
-                DNS["DNS Server"]
-            end
-            subgraph WEB["WEB01 (4GB RAM)"]
-                IIS["IIS 10"]
-                APP["ASP.NET MVC 5<br/>.NET Framework 4.8<br/>在庫管理アプリ"]
-            end
-            subgraph SQL["SQL01 (8GB RAM)"]
-                SQLSRV["SQL Server 2019<br/>Developer Edition"]
-                SQLDB["InventoryDB"]
-            end
-            subgraph MA["YOURMA01 (8GB RAM)"]
-                APPLIANCE["Azure Migrate<br/>Appliance"]
-            end
-        end
-    end
-
-    NAT -->|"NAT"| AzureNIC
-    AzureNIC -->|"10.0.0.0/16"| VPN["VPN Gateway<br/>(On-Prem側)"]
-
-    DC -->|".10"| vSwitch
-    WEB -->|".11"| vSwitch
-    SQL -->|".12"| vSwitch
-    MA -->|".13"| vSwitch
-    vSwitch --> NAT
-
-    APP -->|"Windows認証"| AD
-    APP -->|"SQL接続"| SQLDB
-    APPLIANCE -->|"WinRM"| HostOS
-
-    style AzureVM fill:#f0f0f0,stroke:#333,stroke-width:3px
-    style HostOS fill:#d5e8f9,stroke:#2070c0
-    style vSwitch fill:#fff,stroke:#999
-    style DC fill:#f9e2d2,stroke:#e07020
-    style WEB fill:#d5f5d5,stroke:#20a040
-    style SQL fill:#e8d5f9,stroke:#7030a0
-    style MA fill:#fff3cd,stroke:#c09020
 ```
